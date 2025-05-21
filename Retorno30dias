@@ -1,0 +1,24 @@
+-- Declaração das variáveis principais
+VAR _IdServicoAtual = 'f_Ordens'[Id Cliente Servico]
+VAR _DataAtual = 'f_Ordens'[Data]
+VAR _UsuarioAtual = 'f_Ordens'[Usuario Fechamento]
+
+-- Buscar a próxima ocorrência do mesmo técnico para o mesmo cliente/serviço
+VAR _ProximaOcorrencia =
+    CALCULATE(
+        MIN('f_Ordens'[Usuario Fechamento]),
+        FILTER(
+            ALL('f_Ordens'),
+            'f_Ordens'[Data] > _DataAtual &&
+            'f_Ordens'[Data] <= _DataAtual + 30 &&
+            'f_Ordens'[Id Cliente Servico] = _IdServicoAtual &&
+            'f_Ordens'[Usuario Fechamento] = _UsuarioAtual
+        )
+    )
+
+-- Validar se houve retorno
+VAR _RetornoTecnico =
+    IF(ISBLANK(_ProximaOcorrencia), 0, 1)
+
+RETURN
+    _RetornoTecnico
