@@ -1,0 +1,14 @@
+# Medidas de Tempo
+
+Esta pasta contém medidas DAX relacionadas a manipulação, formatação e cálculos com tempo e datas.
+
+## Subcategorias
+
+### Formatação
+Medidas que transformam valores de tempo em formatos específicos, como conversão de segundos para o formato HH:MM:SS.
+
+### Cálculos
+Medidas que realizam operações matemáticas com tempo, como cálculo de diferenças entre datas, duração de eventos, etc.
+
+### Períodos
+Medidas que trabalham com períodos específicos como mês, trimestre, ano, ou intervalos personalizados.
