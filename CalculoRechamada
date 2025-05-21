@@ -1,0 +1,29 @@
+-- Armazenar a data e cliente da linha atual
+VAR _DataAtual = 'f_Ordens'[Coluna Data]
+VAR _CodCliente = 'f_Ordens'[Coluna ID_Cliente]
+
+-- Procurar a menor data futura dentro de 15 dias para o mesmo cliente
+VAR ProximaData =
+    CALCULATE(
+        MIN('f_Ordens'[Coluna Data]),
+        FILTER(
+            ALL('f_Ordens'),
+            'f_Ordens'[Coluna ID_Cliente] = _CodCliente &&
+            'f_Ordens'[Coluna Data] > _DataAtual &&
+            'f_Ordens'[Coluna Data] <= _DataAtual + 15
+        )
+    )
+-- Identificar o utilizador que abriu essa próxima ordem (rechamada)
+VAR ProximoUsuario =
+    CALCULATE(
+        MIN('f_Ordens'[Usuario Abertura]),
+        FILTER(
+            ALL('f_Ordens'),
+            'f_Ordens'[Coluna ID_Cliente] = _CodCliente &&
+            'f_Ordens'[Coluna Data] = ProximaData &&
+            -- ⚠️ Substituir estas condições por tipos que deves excluir
+            NOT 'f_Ordens'[Tipo] IN { "SUA CONDIÇÃO", "OUTRA CONDIÇÃO", "MAIS UMA CONDIÇÃO" }
+        )
+    )
+RETURN
+IF(ISBLANK(ProximoUsuario), BLANK(), 1)
