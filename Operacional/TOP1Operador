@@ -1,0 +1,19 @@
+-- Obter o operador com maior número de atendimentos
+VAR _TOP1 = 
+    INDEX(
+        1, -- posição 1 = primeiro (top 1)
+        ALL(d_DadosOp[OPERADOR]), -- contexto total de operadores
+        ORDERBY(
+            CALCULATE(
+                [Quantidade Atendimentos],
+                ALL(d_Calendario[Dia]) -- remove o filtro de data
+            ),
+            DESC
+        )
+    )
+-- Obtém a quantidade de atendimentos desse operador
+RETURN
+    CALCULATE(
+        [Quantidade Atendimentos],
+        KEEPFILTERS(TOP1) -- mantém o filtro sobre o operador encontrado
+    )
