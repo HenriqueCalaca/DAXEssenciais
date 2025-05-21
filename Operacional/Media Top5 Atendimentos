@@ -1,0 +1,14 @@
+ROUND(
+    CALCULATE(
+        AVERAGEX(
+            TOPN(
+                5, -- Top 5 operadores
+                ALL(d_DadosOp[OPERADOR]), -- Coluna de Operador ou Usuario
+                [Quantidade de Atendimentos], -- Base de ordenação
+                DESC
+            ),
+            [Quantidade de Atendimentos] -- Métrica a ser média
+        )
+    ),
+    0 -- Arredonda para número inteiro
+)
