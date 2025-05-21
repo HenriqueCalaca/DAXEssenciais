@@ -1,0 +1,19 @@
+-- Calcular serviços dos últimos 6 meses
+VAR _Lasth6Mnth =
+    CALCULATE(
+        [01-Quantidade de Serviços],
+        DATESINPERIOD(
+            dCalendario[Data],
+            MAX(dCalendario[Data]),
+            -6,
+            MONTH
+        )
+    )
+
+-- Retornar o valor condicionalmente
+RETURN
+    IF(
+        NOT ISBLANK(SELECTEDVALUE(dCalendario[Mês-Ano])), -- Verifica se há um mês em contexto
+        _Lasth6Mnth,
+        [01-Quantidade de Serviços] -- Se não houver mês, retorna valor geral
+    )
