@@ -1,0 +1,29 @@
+--Pico de Atendimentos (Hora)
+VAR _Index =
+    INDEX(
+        1,
+        SUMMARIZE(
+            ALLSELECTED( fAtendimentos ),
+            dHora[Horas]),
+            ORDERBY( [10-Media Geral de Atendimentos] , DESC)
+      )
+
+VAR _Index2 =
+    INDEX(
+        2,
+        SUMMARIZE(
+            ALLSELECTED( fAtendimentos ),
+            dHora[Horas]),
+            ORDERBY( [Media Geral de Atendimentos] , DESC)
+      )
+
+VAR _Valor =
+      CALCULATE(
+        [Media Geral de Atendimentos],
+        _Index)
+VAR _Hora = 
+        SELECTCOLUMNS( _Index, "Hora", [Horas] )
+VAR _Hora2 = 
+        SELECTCOLUMNS( _Index2, "Hora", [Horas] )        
+RETURN
+   "Pico de atendimento, " & FORMAT(_Hora, "hh:mm") & " e " & FORMAT(_Hora2, "hh:mm")
