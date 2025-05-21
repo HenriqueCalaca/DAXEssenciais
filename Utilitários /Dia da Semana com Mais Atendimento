@@ -1,0 +1,26 @@
+VAR _Index =
+    INDEX(
+        1,
+        SUMMARIZE(
+            ALLSELECTED(fTalk),
+            dCalendario[Mês-Ano],
+            dCalendario[MesAnoNum],
+            dCalendario[DiaDaSemanaNomeAbrev],
+            dCalendario[DiaDaSemanaNum]
+        ),
+        ORDERBY([10-Media Geral de Atendimentos], DESC)
+    )
+
+VAR _Valor =
+    CALCULATE(
+        [10-Media Geral de Atendimentos],
+        _Index
+    )
+
+VAR _DiaDaSemana =
+    MAXX(_Index, dCalendario[DiaDaSemanaNomeAbrev]) -- obter valor escalar
+
+RETURN
+    "Pico de Atendimento na Semana: " & _DiaDaSemana & " - " & FORMAT(_Valor, "#,##0") &
+    UNICHAR(10) &
+    [14-Pico de Atendimentos (Hora)]
