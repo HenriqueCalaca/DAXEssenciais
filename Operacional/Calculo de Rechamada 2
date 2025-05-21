@@ -1,0 +1,16 @@
+-- Guardar data e cliente da linha atual
+VAR _DataAtual = fAtendimentos[Data da ligacao]
+VAR _Cliente = fAtendimentos[Cliente]
+
+-- Calcular quantas chamadas o cliente fez após a atual, dentro de 7 dias
+VAR _Rechamada = 
+    CALCULATE(
+        COUNTROWS(fAtendimentos),
+        ALLEXCEPT(fAtendimentos, fAtendimentos[Cliente]), -- manter o contexto apenas do cliente
+        fAtendimentos[Data da ligacao] > _DataAtual &&
+        fAtendimentos[Data da ligacao] <= _DataAtual + 7
+    )
+
+-- Retornar 1 se houver rechamada, senão 0
+RETURN 
+    IF(_Rechamada > 0, 1, 0)
