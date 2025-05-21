@@ -1,0 +1,25 @@
+-- Obter o intervalo de datas selecionado (normalmente o mês)
+VAR Data_Inicio_Mes = MIN('dCalendario'[Data])
+VAR Data_Fim_Mes = MAX('dCalendario'[Data])    
+
+-- Contar os clientes ativos até o fim do mês (não cancelados ou com cancelamento posterior)
+VAR _Ativos = 
+    CALCULATE(
+        DISTINCTCOUNT(fVendas[ID_Cliente]),
+        fVendas[Data_Ativacao] <= Data_Fim_Mes,
+        ISBLANK(fClientes[Data_Cancelamento]) || fClientes[Data_Cancelamento] > Data_Fim_Mes
+    )
+
+-- Contar os clientes que cancelaram dentro do mês
+VAR _Cancelados = 
+    CALCULATE(
+        DISTINCTCOUNT(fClientes[ID_Cliente]),
+        fClientes[Data_Cancelamento] >= Data_Inicio_Mes &&
+        fClientes[Data_Cancelamento] <= Data_Fim_Mes
+    )
+
+-- Calcular a taxa de cancelamento
+VAR _Resultado = DIVIDE(_Cancelados, _Ativos, 0)
+
+RETURN
+    _Resultado
