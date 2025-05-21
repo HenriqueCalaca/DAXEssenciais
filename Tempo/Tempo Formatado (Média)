@@ -1,0 +1,21 @@
+VAR _Valor = AVERAGE(fAtendimentos[TA]) -- Média dos tempos em segundos
+VAR _Sinal = IF(_Valor < 0, "-", "") 
+VAR _ValorAbsoluto = ABS(_Valor)  
+
+VAR _Horas = TRUNC(_ValorAbsoluto / 3600)
+VAR _AposHoras = MOD(_ValorAbsoluto, 3600)
+
+VAR _Minutos = TRUNC(_AposHoras / 60)
+VAR _Segundos = MOD(_AposHoras, 60)
+
+VAR _Formatado = 
+    _Sinal &
+    FORMAT(_Horas, "00") & ":" &
+    FORMAT(_Minutos, "00") & ":" &
+    FORMAT(_Segundos, "00")
+
+VAR _Resultado = 
+    IF(NOT ISBLANK(_Valor), VALUE(_Formatado))
+
+RETURN
+    _Resultado
